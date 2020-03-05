@@ -60,7 +60,7 @@ function fileHash(config) {
                         return str;
                     }
                     // https://www.cnblogs.com/chengxs/p/8313598.html
-                    var srcPath = path.resolve(config.filePath, src),
+                    var srcPath = path.join(path.dirname(file), src),
                         fileDate = Date.parse(fs.statSync(srcPath).mtime) + "",
                         md5 = crypto.createHash('md5').update(fileDate).digest('hex').substr(0, 7);
                     src = src.replace(/(\.[^\.]+)$/, "$1?" + md5);

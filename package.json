@@ -1,6 +1,6 @@
 {
   "name": "reasyui-hash",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "请求资源时加hash",
   "main": "./src/index.js",
   "bin": {
