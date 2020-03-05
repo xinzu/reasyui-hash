@@ -8,7 +8,20 @@ npm install reasyui-hash (-g)
 
 reasyui-hash
 
-![image-20200305101223859](F:\wd\reasyui-hash\参数说明.png)
+## 指令说明
+
+1.  使用
+
+   reasyui-hash
+
+2.  查询指令
+
+   reasyui-hash -h
+
+3.  查看版本号
+
+   reasyui-hash -v
+
 
 ## 配置参数说明
 
