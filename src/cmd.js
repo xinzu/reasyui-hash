@@ -71,20 +71,12 @@ const valid = {
     }
 }
 
-const baseQuestions = [{
+const baseQuestions = {
     type: 'input',
     name: 'filePath',
     message: '添加HASH的文件地址：',
     validate: valid.folder // 必填，可以是文件也可以是文件夹
-}, {
-    type: 'input',
-    name: 'outPath',
-    message: '修改后的文件地址：',
-    default (answers) {
-        return getDirname(answers.filePath);
-    },
-    validate: valid.specialfile
-}];
+};
 
 function getCfg() {
     return inquirer.prompt(baseQuestions)

@@ -1,5 +1,8 @@
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
+import logColor from "colors-console";
+
 function scanFolder(folder) {
     var fileList = [],
         folderList = [],
@@ -55,8 +58,29 @@ function createFolder(folder, callback) {
         console.log(e);
     }
 }
+
+function getFileMd5(rootPtah, filePath, sourcePath) {
+    var md5srcPath = sourcePath.substring(0 , 1) == "/" ? path.join(rootPtah, sourcePath) : path.join(path.dirname(filePath), sourcePath);
+    if (!fs.existsSync(md5srcPath)) {
+        console.log(logColor("red", `文件${filePath}中引用的${sourcePath}不存在，请检查代码`));
+        return "";
+    }
+    var fileDate = Date.parse(fs.statSync(md5srcPath).mtime) + "",
+        md5 = crypto.createHash('md5').update(fileDate).digest('hex').substr(0, 7);
+    return md5;
+}
+
+function getFileList(filePath) {
+    var scanData = scanFolder(filePath),
+        fileArr = [];
+
+    scanData.files.forEach((val) => {
+        fileArr.push(val);
+    });
+    return fileArr;
+}
+
 export {
-    createFolder,
-    copyFile,
-    scanFolder
+    getFileMd5,
+    getFileList
 }

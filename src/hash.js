@@ -1,12 +1,11 @@
 import fs from "fs";
 import path from "path";
 import {
-    createFolder,
-    copyFile,
-    scanFolder
+    getFileList,
+    getFileMd5
 } from "./file";
 
-const crypto = require('crypto');
+import logColor from "colors-console";
 
 // 正则 from https://github.com/yuhonyon/gulp-yfy-rev
 const ASSET_REG = {
@@ -21,34 +20,21 @@ const imgExt = [".png", ".jpg", ".jpeg", ".bmp", ".gif", ".ico"];
 var filePathList = []; // 文件列表
 
 
-function getFileList(filePath) {
-    var scanData = scanFolder(filePath);
-
-    scanData.files.forEach((val) => {
-        filePathList.push(val);
-    });
-}
-
 function fileHash(config) {
+    var inPath = config.filePath; // 源代码路径
     // 先拿到所有的文件路径
-    getFileList(config.filePath);
-    // 创建目录
-    var distFilePath;
-    createFolder(config.outPath);
-    filePathList.forEach((file) => {
-        // 复制文件及文件夹
-        copyFile(file, path.join(config.outPath, path.relative(config.filePath, file)));
-    });
+    filePathList = getFileList(inPath);
 
     filePathList.forEach((file) => {
         // 读取文件内容
         // 修改资源文件后缀
         var data = fs.readFileSync(file, 'utf8');
-        distFilePath = path.join(config.outPath, path.relative(config.filePath, file));
+        path.join("C:/Users/Administrator/Desktop/AC5_cn_normal_src", path.relative("C:/Users/Administrator/Desktop/AC5_cn_normal_src/js/network.js", "/img/5g.png"))
         if (imgExt.indexOf(path.extname(file)) == -1) {
             // 不是图片，修改内容
             for (var type in ASSET_REG) {
-                data = data.replace(ASSET_REG[type], function (str, tag, src) {
+                data = data.replace(ASSET_REG[type], (str, tag, src) => {
+
                     // 去掉当前hash值和外层引号
                     src = src.replace(/^["']|["']$/g, "")
                     if (src.lastIndexOf("?") > 0) {
@@ -60,19 +46,17 @@ function fileHash(config) {
                         return str;
                     }
                     // https://www.cnblogs.com/chengxs/p/8313598.html
-                    var srcPath = path.join(path.dirname(file), src),
-                        fileDate = Date.parse(fs.statSync(srcPath).mtime) + "",
-                        md5 = crypto.createHash('md5').update(fileDate).digest('hex').substr(0, 7);
-                    src = src.replace(/(\.[^\.]+)$/, "$1?" + md5);
+                    var md5 = getFileMd5(inPath, file, src);
 
+                    src = src.replace(/(\.[^\.]+)$/, "$1?" + md5);
                     return tag + '"' + src + '"';
                 });
             }
-            fs.writeFileSync(distFilePath, data);
+            fs.writeFileSync(file, data);
         }
     });
-    console.log("done，文件保存在", config.outPath);
+    console.log(logColor("green", "DONE"));
+    console.log(logColor("red", `如果在js中生成的html代码引用资源导致路径错误，请手动修改`));
 }
-
 
 export default fileHash;
