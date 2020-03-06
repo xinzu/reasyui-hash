@@ -2,10 +2,12 @@ import fs from "fs";
 import path from "path";
 import {
     getFileList,
-    getFileMd5
+    getFileMd5,
+    LOG_TYPE,
+    log
 } from "./file";
 
-import logColor from "colors-console";
+import logColor from "colors";
 
 // 正则 from https://github.com/yuhonyon/gulp-yfy-rev
 const ASSET_REG = {
@@ -55,8 +57,10 @@ function fileHash(config) {
             fs.writeFileSync(file, data);
         }
     });
-    console.log(logColor("green", "DONE"));
-    console.log(logColor("red", `如果在js中生成的html代码引用资源导致路径错误，请手动修改`));
+    // log("DONE",  LOG_TYPE.DONE);
+
+    console.log(logColor.green(`DONE`));
+    log(`如果在js中生成的html代码引用资源导致路径错误，请手动修改`, LOG_TYPE.ERROR);
 }
 
 export default fileHash;
