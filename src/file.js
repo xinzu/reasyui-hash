@@ -62,19 +62,24 @@ function scanFolder(folder) {
     var fileList = [],
         folderList = [],
         itemList = [],
+        ext = [".js", ".asp", ".html", ".htm", ".css"],
         walk = function(folder, fileList, folderList) {
             var files = fs.readdirSync(folder);
             files.forEach(function(item) {
                 var tmpPath = folder + '/' + item,
                     stats = fs.statSync(tmpPath);
-
-                if (stats.isDirectory()) {
-                    walk(tmpPath, fileList, folderList);
-                    folderList.push(path.resolve(tmpPath));
-                    itemList.push(item);
-                } else {
-                    fileList.push(path.resolve(tmpPath));
+                if(item.indexOf(".") !== 0) {
+                    if (stats.isDirectory()) {
+                        walk(tmpPath, fileList, folderList);
+                        folderList.push(path.resolve(tmpPath));
+                        itemList.push(item);
+                    } else {
+                        if(ext.indexOf(path.extname(item).toLowerCase())) {
+                            fileList.push(path.resolve(tmpPath));
+                        }
+                    }
                 }
+                
             });
         };
 
