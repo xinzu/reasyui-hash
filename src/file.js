@@ -74,12 +74,12 @@ function scanFolder(folder) {
                         folderList.push(path.resolve(tmpPath));
                         itemList.push(item);
                     } else {
-                        if(ext.indexOf(path.extname(item).toLowerCase())) {
+                        if(ext.indexOf(path.extname(item).toLowerCase()) != -1) {
                             fileList.push(path.resolve(tmpPath));
                         }
                     }
                 }
-                
+
             });
         };
 

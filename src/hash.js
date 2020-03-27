@@ -26,6 +26,7 @@ function fileHash(config) {
     var inPath = config.filePath; // 源代码路径
     // 先拿到所有的文件路径
     filePathList = getFileList(inPath);
+    console.log(filePathList);
 
     filePathList.forEach((file) => {
         // 读取文件内容
