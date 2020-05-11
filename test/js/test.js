@@ -1,0 +1,1 @@
+var html = '<img src="./a.png?d2c2869">'

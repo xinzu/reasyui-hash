@@ -26,7 +26,6 @@ function fileHash(config) {
     var inPath = config.filePath; // 源代码路径
     // 先拿到所有的文件路径
     filePathList = getFileList(inPath);
-    console.log(filePathList);
 
     filePathList.forEach((file) => {
         // 读取文件内容
@@ -51,8 +50,7 @@ function fileHash(config) {
                     // https://www.cnblogs.com/chengxs/p/8313598.html
                     var md5 = getFileMd5(inPath, file, src);
 
-                    src = src.replace(/(\.[^\.]+)$/, "$1?" + md5);
-                    return tag + '"' + src + '"';
+                    return md5 ? (tag + '"' + src.replace(/(\.[^\.]+)$/, "$1?" + md5) + '"') : str;
                 });
             }
             fs.writeFileSync(file, data);
